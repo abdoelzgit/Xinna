@@ -62,7 +62,6 @@ export async function deleteObat(id: string) {
                 id: BigInt(id),
             },
         });
-
         revalidatePath("/obat");
         return { success: true };
     } catch (error) {

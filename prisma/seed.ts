@@ -2,6 +2,7 @@ import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
+import bcrypt from "bcryptjs";
 
 
 const connectionString = `${process.env.DATABASE_URL}`;
@@ -12,6 +13,8 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
     console.log('Start seeding...')
+
+    const hashedPassword = await bcrypt.hash('password123', 10);
 
     // 1. Jenis Obat
     const jenisObats = await Promise.all([
@@ -95,9 +98,9 @@ async function main() {
 
     // 6. User (Staff)
     const users = await Promise.all([
-        prisma.user.create({ data: { name: 'Admin Utama', email: 'admin@xinna.com', password: 'password123', jabatan: 'admin' } }),
-        prisma.user.create({ data: { name: 'Apoteker Rudi', email: 'rudi@xinna.com', password: 'password123', jabatan: 'apoteker' } }),
-        prisma.user.create({ data: { name: 'Kurir Andi', email: 'andi@xinna.com', password: 'password123', jabatan: 'karyawan' } }),
+        prisma.user.create({ data: { name: 'Admin Utama', email: 'admin@xinna.com', password: hashedPassword, jabatan: 'admin' } }),
+        prisma.user.create({ data: { name: 'Apoteker Rudi', email: 'rudi@xinna.com', password: hashedPassword, jabatan: 'apoteker' } }),
+        prisma.user.create({ data: { name: 'Kurir Andi', email: 'andi@xinna.com', password: hashedPassword, jabatan: 'karyawan' } }),
     ])
 
     // 7. Distributor

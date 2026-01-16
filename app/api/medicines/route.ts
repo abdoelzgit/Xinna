@@ -13,12 +13,13 @@ export async function GET() {
     try {
         const medicines = await prisma.obat.findMany({
             include: {
-                jenis_obat: true, // Test relation to JenisObat
+                jenis_obat: true,
             },
         });
         return NextResponse.json(serializeBigInt(medicines));
-    } catch (error) {
-        return NextResponse.json({ error: "Failed to fetch medicines" }, { status: 500 });
+    } catch (error: any) {
+        console.error("Prisma Error:", error);
+        return NextResponse.json({ error: error.message, code: error.code }, { status: 500 });
     }
 }
 
