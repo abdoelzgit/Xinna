@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -21,8 +21,9 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { toast } from "sonner"
 
-export function LoginForm({
+function LoginFormInner({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -31,6 +32,21 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const errorParam = searchParams.get("error")
+    if (errorParam === "unauthorized") {
+      toast.error("Wajib login terlebih dahulu", {
+        description: "Halaman ini memerlukan autentikasi.",
+        duration: 4000,
+      })
+
+      // Clear the query param without refreshing the page
+      const newUrl = window.location.pathname
+      window.history.replaceState({}, "", newUrl)
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,12 +61,21 @@ export function LoginForm({
       })
 
       if (result?.error) {
+        toast.error("Gagal Login", {
+          description: "Email atau password yang Anda masukkan salah.",
+        })
         setError("Email atau password salah")
       } else {
+        toast.success("Login Berhasil", {
+          description: "Selamat datang kembali!",
+        })
         router.push("/dashboard")
         router.refresh()
       }
     } catch (err) {
+      toast.error("Kesalahan Sistem", {
+        description: "Terjadi kesalahan saat mencoba login.",
+      })
       setError("Terjadi kesalahan saat login")
     } finally {
       setIsLoading(false)
@@ -83,9 +108,6 @@ export function LoginForm({
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
-              {error && (
-                <p className="text-xs font-medium text-destructive text-center">{error}</p>
-              )}
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
@@ -132,5 +154,13 @@ export function LoginForm({
         and <a href="#">Privacy Policy</a>.
       </FieldDescription>
     </div>
+  )
+}
+
+export function LoginForm(props: React.ComponentProps<"div">) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginFormInner {...props} />
+    </Suspense>
   )
 }

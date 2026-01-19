@@ -42,6 +42,8 @@ model Obat {
   harga_jual        Float
   deskripsi_obat    String?
   foto1             String?           @db.VarChar(255)
+  foto2             String?           @db.VarChar(255)
+  foto3             String?           @db.VarChar(255)
   stok              Int
   created_at        DateTime          @default(now())
   updated_at        DateTime          @updatedAt

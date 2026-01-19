@@ -7,7 +7,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { usePathname } from "next/navigation";
 import { AuthProvider } from "@/components/auth-provider";
-
+import { Toaster } from "@/components/ui/sonner";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -35,6 +35,7 @@ export default function RootLayout({
             {children}
           </main>
           {!isSpecialPage && <Footer />}
+          <Toaster position="top-center" richColors />
         </AuthProvider>
       </body>
     </html>
