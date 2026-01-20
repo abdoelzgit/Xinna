@@ -59,7 +59,7 @@ export default async function Home() {
               >
                 {/* Product Image Area */}
                 <Link
-                  href={`/medicine/${item.id}`}
+                  href={`/medicine/${item.hashedId}`}
                   className="aspect-[4/5] bg-slate-50 border border-slate-100 overflow-hidden relative transition-all duration-700 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[2rem]"
                 >
                   {item.foto1 ? (
@@ -101,7 +101,7 @@ export default async function Home() {
 
                   <div className="flex flex-col space-y-1">
                     <h3 className="text-xl font-bold tracking-tight leading-tight hover:text-primary transition-colors cursor-pointer">
-                      <Link href={`/medicine/${item.id}`}>{item.nama_obat}</Link>
+                      <Link href={`/medicine/${item.hashedId}`}>{item.nama_obat}</Link>
                     </h3>
                     <div className="flex items-center gap-1.5 mt-1">
                       <div className="flex">

@@ -2,24 +2,28 @@
 
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { encodeId, decodeIdAsBigInt } from "@/lib/hashids"
 
-// Helper to handle BigInt serialization
+// Helper to handle BigInt serialization and add hashedId
 const serialize = (data: any) => {
-    return JSON.parse(
+    if (!data) return null;
+
+    if (Array.isArray(data)) {
+        return data.map(item => serialize(item));
+    }
+
+    const serialized = JSON.parse(
         JSON.stringify(data, (key, value) =>
             typeof value === "bigint" ? value.toString() : value
         )
     )
-}
 
-export async function getProductById(id: string) {
-    const product = await prisma.obat.findUnique({
-        where: { id: BigInt(id) },
-        include: {
-            jenis_obat: true,
-        },
-    })
-    return product ? serialize(product) : null
+    // Auto-inject hashedId if id exists
+    if (data.id) {
+        serialized.hashedId = encodeId(data.id);
+    }
+
+    return serialized;
 }
 
 export async function getProducts() {
@@ -28,10 +32,23 @@ export async function getProducts() {
             jenis_obat: true,
         },
         orderBy: {
-            updated_at: "desc",
+            created_at: "desc",
         },
     })
     return serialize(products)
+}
+
+export async function getProductById(id: string) {
+    const numericId = decodeIdAsBigInt(id);
+    if (!numericId) return null;
+
+    const product = await prisma.obat.findUnique({
+        where: { id: numericId },
+        include: {
+            jenis_obat: true,
+        },
+    })
+    return product ? serialize(product) : null
 }
 
 export async function getCategories() {
@@ -49,24 +66,19 @@ export async function createProduct(data: {
     harga_jual: number
     stok: number
     deskripsi_obat?: string
-    foto1?: string
-    foto2?: string
-    foto3?: string
 }) {
-    await prisma.obat.create({
+    const product = await prisma.obat.create({
         data: {
             nama_obat: data.nama_obat,
-            jenis_obat: { connect: { id: BigInt(data.id_jenis_obat) } },
+            id_jenis_obat: BigInt(data.id_jenis_obat),
             harga_jual: data.harga_jual,
             stok: data.stok,
             deskripsi_obat: data.deskripsi_obat,
-            foto1: data.foto1,
-            foto2: data.foto2,
-            foto3: data.foto3,
         },
     })
+
     revalidatePath("/dashboard/products")
-    revalidatePath("/")
+    return serialize(product)
 }
 
 export async function updateProduct(
@@ -77,31 +89,32 @@ export async function updateProduct(
         harga_jual: number
         stok: number
         deskripsi_obat?: string
-        foto1?: string
-        foto2?: string
-        foto3?: string
     }
 ) {
-    await prisma.obat.update({
-        where: { id: BigInt(id) },
+    const numericId = decodeIdAsBigInt(id);
+    if (!numericId) throw new Error("Invalid Product ID");
+
+    const product = await prisma.obat.update({
+        where: { id: numericId },
         data: {
             nama_obat: data.nama_obat,
-            jenis_obat: { connect: { id: BigInt(data.id_jenis_obat) } },
+            id_jenis_obat: BigInt(data.id_jenis_obat),
             harga_jual: data.harga_jual,
             stok: data.stok,
             deskripsi_obat: data.deskripsi_obat,
-            foto1: data.foto1,
-            foto2: data.foto2,
-            foto3: data.foto3,
         },
     })
+
     revalidatePath("/dashboard/products")
-    revalidatePath("/")
+    return serialize(product)
 }
 
 export async function deleteProduct(id: string) {
+    const numericId = decodeIdAsBigInt(id);
+    if (!numericId) throw new Error("Invalid Product ID");
+
     await prisma.obat.delete({
-        where: { id: BigInt(id) },
+        where: { id: numericId },
     })
     revalidatePath("/dashboard/products")
 }

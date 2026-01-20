@@ -158,7 +158,7 @@ export function ProductClient({ initialProducts, categories }: ProductClientProp
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     className="text-destructive focus:text-destructive"
-                                                    onClick={() => handleDelete(product.id)}
+                                                    onClick={() => handleDelete(product.hashedId)}
                                                 >
                                                     <IconTrash className="size-4 mr-2" />
                                                     Hapus

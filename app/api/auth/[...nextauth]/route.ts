@@ -16,28 +16,43 @@ export const authOptions = {
                     throw new Error("Invalid credentials");
                 }
 
+                // 1. Cek di tabel User (Staff)
                 const user = await prisma.user.findUnique({
-                    where: {
-                        email: credentials.email
-                    }
+                    where: { email: credentials.email }
                 });
 
-                if (!user || !user.password) {
-                    throw new Error("User not found");
+                if (user && user.password) {
+                    const isValid = await bcrypt.compare(credentials.password, user.password);
+                    if (isValid) {
+                        return {
+                            id: user.id.toString(),
+                            name: user.name,
+                            email: user.email,
+                            jabatan: user.jabatan,
+                            userType: "staff"
+                        };
+                    }
                 }
 
-                const isValid = await bcrypt.compare(credentials.password, user.password);
+                // 2. Cek di tabel Pelanggan (Customer)
+                const pelanggan = await prisma.pelanggan.findUnique({
+                    where: { email: credentials.email }
+                });
 
-                if (!isValid) {
-                    throw new Error("Invalid password");
+                if (pelanggan && pelanggan.katakunci) {
+                    const isValid = await bcrypt.compare(credentials.password, pelanggan.katakunci);
+                    if (isValid) {
+                        return {
+                            id: pelanggan.id.toString(),
+                            name: pelanggan.nama_pelanggan,
+                            email: pelanggan.email,
+                            jabatan: "pelanggan",
+                            userType: "customer"
+                        };
+                    }
                 }
 
-                return {
-                    id: user.id.toString(),
-                    name: user.name,
-                    email: user.email,
-                    jabatan: user.jabatan
-                };
+                throw new Error("Email atau password salah");
             }
         })
     ],
@@ -46,6 +61,7 @@ export const authOptions = {
             if (user) {
                 token.id = user.id;
                 token.jabatan = (user as any).jabatan;
+                token.userType = (user as any).userType;
             }
             return token;
         },
@@ -53,6 +69,7 @@ export const authOptions = {
             if (token) {
                 (session.user as any).id = token.id;
                 (session.user as any).jabatan = token.jabatan;
+                (session.user as any).userType = token.userType;
             }
             return session;
         }

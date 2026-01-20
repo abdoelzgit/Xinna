@@ -69,7 +69,17 @@ function LoginFormInner({
         toast.success("Login Berhasil", {
           description: "Selamat datang kembali!",
         })
-        router.push("/dashboard")
+
+        // Ambil session terbaru untuk menentukan arah redirect
+        const response = await fetch("/api/auth/session")
+        const session = await response.json()
+        const userType = session?.user?.userType
+
+        if (userType === "staff") {
+          router.push("/dashboard")
+        } else {
+          router.push("/")
+        }
         router.refresh()
       }
     } catch (err) {
@@ -142,7 +152,7 @@ function LoginFormInner({
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
+                  Don&apos;t have an account? <a href="/register">Sign up</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

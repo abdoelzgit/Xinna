@@ -105,7 +105,7 @@ export function ProductDialog({
         setIsSubmitting(true)
         try {
             if (product) {
-                await updateProduct(product.id.toString(), formData)
+                await updateProduct(product.hashedId, formData)
                 toast.success("Produk berhasil diperbarui")
             } else {
                 await createProduct(formData)

@@ -11,15 +11,28 @@ export default withAuth(
 
         if (isAuthPage) {
             if (isAuth) {
-                return NextResponse.redirect(new URL("/dashboard", req.url))
+                // Redirect based on user type
+                if (token.userType === "staff") {
+                    return NextResponse.redirect(new URL("/dashboard", req.url))
+                } else {
+                    return NextResponse.redirect(new URL("/", req.url))
+                }
             }
             return null
         }
 
-        if (!isAuth && pathname.startsWith("/dashboard")) {
-            const loginUrl = new URL("/login", req.url)
-            loginUrl.searchParams.set("error", "unauthorized")
-            return NextResponse.redirect(loginUrl)
+        // Dashboard Protection
+        if (pathname.startsWith("/dashboard")) {
+            if (!isAuth) {
+                const loginUrl = new URL("/login", req.url)
+                loginUrl.searchParams.set("error", "unauthorized")
+                return NextResponse.redirect(loginUrl)
+            }
+
+            // Block Customers from Dashboard
+            if (token.userType === "customer") {
+                return NextResponse.redirect(new URL("/", req.url))
+            }
         }
     },
     {

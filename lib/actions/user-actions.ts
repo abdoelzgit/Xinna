@@ -6,14 +6,28 @@ import bcrypt from "bcryptjs"
 import { Jabatan } from "@prisma/client"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { encodeId, decodeIdAsBigInt } from "@/lib/hashids"
 
-// Helper to handle BigInt serialization
+// Helper to handle BigInt serialization and add hashedId
 const serialize = (data: any) => {
-    return JSON.parse(
+    if (!data) return null;
+
+    if (Array.isArray(data)) {
+        return data.map(item => serialize(item));
+    }
+
+    const serialized = JSON.parse(
         JSON.stringify(data, (key, value) =>
             typeof value === "bigint" ? value.toString() : value
         )
     )
+
+    // Auto-inject hashedId
+    if (data.id) {
+        serialized.hashedId = encodeId(data.id);
+    }
+
+    return serialized;
 }
 
 export async function getUsers() {
@@ -26,8 +40,11 @@ export async function getUsers() {
 }
 
 export async function getUserById(id: string) {
+    const numericId = decodeIdAsBigInt(id);
+    if (!numericId) return null;
+
     const user = await prisma.user.findUnique({
-        where: { id: BigInt(id) },
+        where: { id: numericId },
     })
     return user ? serialize(user) : null
 }
@@ -62,26 +79,28 @@ export async function updateUser(
         jabatan: Jabatan
     }
 ) {
-    const session = await getServerSession(authOptions)
-    const currentUserId = (session?.user as any)?.id
+    const numericId = decodeIdAsBigInt(id);
+    if (!numericId) throw new Error("Invalid User ID");
 
     const updateData: any = {
         name: data.name,
         email: data.email,
     }
 
-    if (id === currentUserId) {
-        // Fetch current user to ensure jabatan is not changed if it's a self-edit
-        const currentUser = await prisma.user.findUnique({
-            where: { id: BigInt(id) },
-            select: { jabatan: true }
-        })
+    // Protection: If target user is an Admin, their role cannot be changed
+    const targetUser = await prisma.user.findUnique({
+        where: { id: numericId },
+        select: { jabatan: true }
+    })
 
-        if (currentUser && currentUser.jabatan !== data.jabatan) {
-            throw new Error("Anda tidak dapat mengubah jabatan Anda sendiri demi keamanan.")
+    if (targetUser?.jabatan === "admin") {
+        if (data.jabatan !== "admin") {
+            throw new Error("Akun dengan jabatan Admin tidak dapat diubah rolenya demi keamanan sistem.")
         }
+        // Keep it as admin
+        updateData.jabatan = "admin"
     } else {
-        // Only update jabatan if it's not a self-edit
+        // Target is not admin, role can be changed (e.g. promoted to admin)
         updateData.jabatan = data.jabatan
     }
 
@@ -90,7 +109,7 @@ export async function updateUser(
     }
 
     const user = await prisma.user.update({
-        where: { id: BigInt(id) },
+        where: { id: numericId },
         data: updateData,
     })
 
@@ -99,8 +118,11 @@ export async function updateUser(
 }
 
 export async function deleteUser(id: string) {
+    const numericId = decodeIdAsBigInt(id);
+    if (!numericId) throw new Error("Invalid User ID");
+
     await prisma.user.delete({
-        where: { id: BigInt(id) },
+        where: { id: numericId },
     })
     revalidatePath("/dashboard/users")
 }

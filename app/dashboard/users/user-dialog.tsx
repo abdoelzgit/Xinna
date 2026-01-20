@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
 import {
     Select,
     SelectContent,
@@ -22,7 +23,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useSession } from "next-auth/react"
 import { createUser, updateUser } from "@/lib/actions/user-actions"
 
 interface UserDialogProps {
@@ -33,7 +33,6 @@ interface UserDialogProps {
 }
 
 export function UserDialog({ open, onOpenChange, user, onSuccess }: UserDialogProps) {
-    const { data: session } = useSession()
     const [loading, setLoading] = React.useState(false)
     const [formData, setFormData] = React.useState({
         name: "",
@@ -42,10 +41,9 @@ export function UserDialog({ open, onOpenChange, user, onSuccess }: UserDialogPr
         jabatan: "karyawan" as Jabatan,
     })
 
-    const isSelf = user?.id === (session?.user as any)?.id
+    const isTargetAdmin = user?.jabatan === 'admin'
 
     React.useEffect(() => {
-        // ... existing useEffect logic ...
         if (user) {
             setFormData({
                 name: user.name || "",
@@ -69,7 +67,8 @@ export function UserDialog({ open, onOpenChange, user, onSuccess }: UserDialogPr
 
         try {
             if (user) {
-                await updateUser(user.id, formData)
+                // Use hashedId for update
+                await updateUser(user.hashedId, formData)
                 toast.success("User berhasil diperbarui")
             } else {
                 if (!formData.password) {
@@ -138,26 +137,31 @@ export function UserDialog({ open, onOpenChange, user, onSuccess }: UserDialogPr
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="jabatan">Jabatan</Label>
-                            <Select
-                                value={formData.jabatan}
-                                onValueChange={(value) => setFormData({ ...formData, jabatan: value as Jabatan })}
-                                disabled={isSelf}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Pilih jabatan" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {Object.values(Jabatan).map((role) => (
-                                        <SelectItem key={role} value={role} className="capitalize">
-                                            {role}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {isSelf && (
-                                <p className="text-[10px] text-muted-foreground italic">
-                                    * Anda tidak dapat mengubah jabatan akun sendiri demi keamanan.
-                                </p>
+                            {isTargetAdmin ? (
+                                <div className="space-y-2">
+                                    <Badge variant="secondary" className="w-fit capitalize py-1.5 px-3">
+                                        {formData.jabatan}
+                                    </Badge>
+                                    <p className="text-[10px] text-muted-foreground italic">
+                                        * Jabatan Admin tidak dapat diubah demi keamanan sistem.
+                                    </p>
+                                </div>
+                            ) : (
+                                <Select
+                                    value={formData.jabatan}
+                                    onValueChange={(value) => setFormData({ ...formData, jabatan: value as Jabatan })}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Pilih jabatan" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Object.values(Jabatan).map((role) => (
+                                            <SelectItem key={role} value={role} className="capitalize">
+                                                {role}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             )}
                         </div>
                     </div>

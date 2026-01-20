@@ -25,8 +25,8 @@ interface MedicinePageProps {
 }
 
 export default async function MedicinePage({ params }: MedicinePageProps) {
-    const { id } = await params;
-    const product = await getProductById(id);
+    const { id } = await params
+    const product = await getProductById(id)
     if (!product) {
         notFound();
     }

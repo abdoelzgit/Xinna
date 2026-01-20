@@ -8,6 +8,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react"
 import { signOut, useSession } from "next-auth/react"
+import Link from "next/link"
 
 import {
   Avatar,
@@ -101,9 +102,11 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle className="size-4" />
-                Account
+              <DropdownMenuItem asChild>
+                <Link href={session?.user?.userType === "customer" ? "/profile" : "/dashboard/settings"}>
+                  <IconUserCircle className="size-4" />
+                  Account
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <IconCreditCard className="size-4" />
