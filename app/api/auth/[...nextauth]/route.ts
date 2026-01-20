@@ -1,10 +1,15 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions = {
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        }),
         CredentialsProvider({
             name: "Credentials",
             credentials: {
@@ -57,11 +62,59 @@ export const authOptions = {
         })
     ],
     callbacks: {
-        async jwt({ token, user }) {
+        async signIn({ user, account, profile }) {
+            if (account?.provider === "google") {
+                const email = user.email;
+                if (!email) return false;
+
+                // Cek apakah sudah ada di User (Staff)
+                const existingUser = await prisma.user.findUnique({
+                    where: { email }
+                });
+
+                if (existingUser) return true;
+
+                // Cek apakah sudah ada di Pelanggan (Customer)
+                const existingPelanggan = await prisma.pelanggan.findUnique({
+                    where: { email }
+                });
+
+                if (!existingPelanggan) {
+                    // Buat Pelanggan baru jika belum ada
+                    await prisma.pelanggan.create({
+                        data: {
+                            nama_pelanggan: user.name || "User Google",
+                            email: email,
+                            katakunci: await bcrypt.hash(Math.random().toString(36).slice(-8), 10), // Random password for safety
+                        }
+                    });
+                }
+            }
+            return true;
+        },
+        async jwt({ token, user, account }) {
             if (user) {
-                token.id = user.id;
-                token.jabatan = (user as any).jabatan;
-                token.userType = (user as any).userType;
+                // Determine userType and jabatan for Google login
+                if (account?.provider === "google") {
+                    const dbUser = await prisma.user.findUnique({ where: { email: user.email! } });
+                    if (dbUser) {
+                        token.id = dbUser.id.toString();
+                        token.jabatan = dbUser.jabatan;
+                        token.userType = "staff";
+                    } else {
+                        const dbPelanggan = await prisma.pelanggan.findUnique({ where: { email: user.email! } });
+                        if (dbPelanggan) {
+                            token.id = dbPelanggan.id.toString();
+                            token.jabatan = "pelanggan";
+                            token.userType = "customer";
+                        }
+                    }
+                } else {
+                    // Credentials login already provides these
+                    token.id = user.id;
+                    token.jabatan = (user as any).jabatan;
+                    token.userType = (user as any).userType;
+                }
             }
             return token;
         },
