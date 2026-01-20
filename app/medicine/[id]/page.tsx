@@ -32,7 +32,7 @@ export default async function MedicinePage({ params }: MedicinePageProps) {
     }
 
     return (
-        <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-primary selection:text-white">
+        <div className="bg-white text-slate-900 font-sans selection:bg-primary selection:text-white">
             <main className="container px-4 md:px-8 py-12 md:py-20 mx-auto">
                 {/* Breadcrumb / Back button could go here */}
 
@@ -41,9 +41,6 @@ export default async function MedicinePage({ params }: MedicinePageProps) {
                     {/* Left Column: Product Info & Details */}
                     <div className="lg:col-span-3 space-y-10 order-2 lg:order-1">
                         <div className="space-y-4">
-                            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">
-                                {product.jenis_obat?.jenis || "Kategori Umum"}
-                            </span>
                             <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-[0.9] text-slate-950">
                                 {product.nama_obat}
                             </h1>
@@ -133,7 +130,6 @@ export default async function MedicinePage({ params }: MedicinePageProps) {
                     {/* Right Column: Pricing & Actions */}
                     <div className="lg:col-span-3 space-y-10 order-3 lg:pt-4">
                         <div className="space-y-1">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Harga Terbaik</span>
                             <p className="text-5xl font-black text-slate-950 tracking-tighter italic leading-none">
                                 Rp {new Intl.NumberFormat('id-ID').format(product.harga_jual)}
                             </p>

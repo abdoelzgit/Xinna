@@ -24,6 +24,7 @@ import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
+import { useSession } from "next-auth/react"
 import {
   Sidebar,
   SidebarContent,
@@ -50,6 +51,12 @@ const data = {
       title: "Products",
       url: "/dashboard/products",
       icon: IconPills,
+    },
+    {
+      title: "Users",
+      url: "/dashboard/users",
+      icon: IconUsers,
+      role: "admin",
     },
   ],
   navClouds: [
@@ -127,6 +134,16 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session } = useSession()
+  const userRole = (session?.user as any)?.jabatan
+
+  const filteredNavMain = data.navMain.filter(item => {
+    if ((item as any).role && (item as any).role !== userRole) {
+      return false
+    }
+    return true
+  })
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -145,7 +162,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={filteredNavMain} />
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

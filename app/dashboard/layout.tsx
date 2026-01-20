@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
+import { UnauthorizedDialog } from "@/components/unauthorized-dialog"
 import {
     SidebarInset,
     SidebarProvider,
@@ -26,6 +27,7 @@ export default function DashboardLayout({
                     {children}
                 </div>
             </SidebarInset>
+            <UnauthorizedDialog />
         </SidebarProvider>
     )
 }

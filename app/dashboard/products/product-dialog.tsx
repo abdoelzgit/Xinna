@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/select"
 import { createProduct, updateProduct } from "@/lib/actions/product-actions"
 import { ImageUpload } from "@/components/ui/image-upload"
+import { Textarea } from "@/components/ui/textarea"
+
 
 interface ProductDialogProps {
     open: boolean
@@ -198,7 +200,7 @@ export function ProductDialog({
 
                         <Field>
                             <FieldLabel>Deskripsi Obat</FieldLabel>
-                            <Input
+                            <Textarea
                                 value={formData.deskripsi_obat}
                                 onChange={(e) => setFormData({ ...formData, deskripsi_obat: e.target.value })}
                                 placeholder="Keterangan dosis, efek samping, dll..."
