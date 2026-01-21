@@ -1,0 +1,51 @@
+"use server"
+
+import prisma from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
+import { StatusOrder } from "@prisma/client"
+
+const serialize = (data: any) => {
+    return JSON.parse(
+        JSON.stringify(data, (key, value) =>
+            typeof value === "bigint" ? value.toString() : value
+        )
+    )
+}
+
+export async function getSalesHistory() {
+    try {
+        const sales = await prisma.penjualan.findMany({
+            include: {
+                pelanggan: true,
+                metode_bayar: true,
+                jenis_pengiriman: true,
+                details: {
+                    include: {
+                        obat: true
+                    }
+                }
+            },
+            orderBy: {
+                created_at: "desc"
+            }
+        })
+        return serialize(sales)
+    } catch (error) {
+        console.error("Failed to fetch sales history:", error)
+        throw new Error("Failed to fetch sales history")
+    }
+}
+
+export async function updateOrderStatus(id: string, status: StatusOrder) {
+    try {
+        await prisma.penjualan.update({
+            where: { id: BigInt(id) },
+            data: { status_order: status }
+        })
+        revalidatePath("/dashboard/sales")
+        return { success: true }
+    } catch (error) {
+        console.error("Failed to update order status:", error)
+        return { error: "Gagal memperbarui status pesanan." }
+    }
+}

@@ -62,3 +62,56 @@ export async function getCustomers() {
     })
     return serialize(customers)
 }
+
+export async function getProfileData(email: string) {
+    try {
+        const pelanggan = await prisma.pelanggan.findUnique({
+            where: { email }
+        })
+
+        if (pelanggan) {
+            return { success: true, type: "customer", data: serialize(pelanggan) }
+        }
+
+        const staff = await prisma.user.findUnique({
+            where: { email }
+        })
+
+        if (staff) {
+            return { success: true, type: "staff", data: serialize(staff) }
+        }
+
+        return { error: "User not found" }
+    } catch (error) {
+        return { error: "Failed to fetch profile data" }
+    }
+}
+
+export async function updateCustomer(id: string, data: {
+    nama_pelanggan: string
+    no_telp?: string
+    alamat1?: string
+    kota1?: string
+    propinsi1?: string
+    kodepos1?: string
+}) {
+    try {
+        const updated = await prisma.pelanggan.update({
+            where: { id: BigInt(id) },
+            data: {
+                nama_pelanggan: data.nama_pelanggan,
+                no_telp: data.no_telp,
+                alamat1: data.alamat1,
+                kota1: data.kota1,
+                propinsi1: data.propinsi1,
+                kodepos1: data.kodepos1,
+            }
+        })
+
+        revalidatePath("/profile")
+        return { success: true, customer: serialize(updated) }
+    } catch (error) {
+        console.error("Update error:", error)
+        return { error: "Gagal memperbarui profil." }
+    }
+}

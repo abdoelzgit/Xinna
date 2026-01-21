@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ProductGallery } from "@/components/product-gallery";
+import { AddToCart } from "@/components/add-to-cart";
 
 interface MedicinePageProps {
     params: {
@@ -137,10 +138,10 @@ export default async function MedicinePage({ params }: MedicinePageProps) {
 
                         <div className="space-y-4">
                             {product.stok > 0 ? (
-                                <Button className="w-full h-16 rounded-[1.5rem] bg-slate-950 text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-primary transition-all shadow-2xl hover:shadow-primary/20 group">
-                                    <ShoppingCart className="mr-2 size-5 transition-transform group-hover:scale-110" />
-                                    Tambahkan Ke Keranjang
-                                </Button>
+                                <AddToCart
+                                    productId={product.hashedId}
+                                    stock={product.stok}
+                                />
                             ) : (
                                 <Button disabled className="w-full h-16 rounded-[1.5rem] bg-slate-100 text-slate-400 font-black uppercase tracking-[0.2em] text-[11px]">
                                     Out of Stock

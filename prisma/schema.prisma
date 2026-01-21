@@ -145,6 +145,7 @@ model Pembelian {
   tgl_pembelian  DateTime          @db.Date
   total_bayar    Float
   id_distributor BigInt
+  foto_nota      String?           @db.VarChar(255)
   created_at     DateTime          @default(now())
   updated_at     DateTime          @updatedAt
   details        DetailPembelian[]

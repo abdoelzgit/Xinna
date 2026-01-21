@@ -133,7 +133,7 @@ export function ProductClient({ initialProducts, categories }: ProductClientProp
                                         <div className="flex flex-col">
                                             <span>{product.nama_obat}</span>
                                             {product.deskripsi_obat && (
-                                                <span className="text-xs text-muted-foreground line-clamp-1">
+                                                <span className="text-xs text-muted-foreground truncate max-w-[250px]">
                                                     {product.deskripsi_obat}
                                                 </span>
                                             )}

@@ -53,6 +53,16 @@ const data = {
       icon: IconPills,
     },
     {
+      title: "Penjualan",
+      url: "/dashboard/sales",
+      icon: IconReport,
+    },
+    {
+      title: "Pembelian",
+      url: "/dashboard/purchases",
+      icon: IconListDetails,
+    },
+    {
       title: "Users",
       url: "/dashboard/users",
       icon: IconUsers,

@@ -28,10 +28,23 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 
+import { getCartCount } from "@/lib/actions/cart-actions"
+
 export function Header() {
     const { data: session } = useSession()
-    // Mock cart count - can be linked to Zustand/Context/API later
-    const [cartCount, setCartCount] = React.useState(0);
+    const [cartCount, setCartCount] = React.useState(0)
+
+    React.useEffect(() => {
+        const fetchCartCount = async () => {
+            if (session?.user?.userType === "customer") {
+                const count = await getCartCount()
+                setCartCount(count)
+            } else {
+                setCartCount(0)
+            }
+        }
+        fetchCartCount()
+    }, [session])
 
     return (
         <header className=" top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -60,7 +73,7 @@ export function Header() {
                     <NavigationMenu>
                         <NavigationMenuList className="gap-4">
                             <NavigationMenuItem>
-                                <Link href="/" legacyBehavior passHref>
+                                <Link href="/cart" legacyBehavior passHref>
                                     <NavigationMenuLink className=" relative py-1 after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 after:ease-in-out hover:after:origin-bottom-left hover:after:scale-x-100 uppercase tracking-widest flex flex-row items-center gap-1.5 ">
                                         Cart <span className="inline-flex items-center justify-center leading-none shrink-0 font-normal">
                                             ({cartCount})
