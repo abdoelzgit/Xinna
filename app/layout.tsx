@@ -8,6 +8,7 @@ import { Footer } from "@/components/footer";
 import { usePathname } from "next/navigation";
 import { AuthProvider } from "@/components/auth-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { AiChatWidget } from "@/components/ai-chat-widget";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
             {children}
           </main>
           {!isSpecialPage && <Footer />}
+          {!isSpecialPage && <AiChatWidget />}
           <Toaster position="top-center" richColors />
         </AuthProvider>
       </body>
