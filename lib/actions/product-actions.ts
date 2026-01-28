@@ -38,6 +38,42 @@ export async function getProducts() {
     return serialize(products)
 }
 
+export async function getFilteredProducts(filters: {
+    search?: string;
+    category?: string;
+    sort?: 'price_asc' | 'price_desc' | 'latest' | '';
+}) {
+    const where: any = {};
+
+    if (filters.search) {
+        where.nama_obat = {
+            contains: filters.search,
+            mode: 'insensitive'
+        };
+    }
+
+    if (filters.category && filters.category !== 'all') {
+        const catId = decodeIdAsBigInt(filters.category);
+        if (catId) {
+            where.id_jenis_obat = catId;
+        }
+    }
+
+    const orderBy: any = {};
+    if (filters.sort === 'price_asc') orderBy.harga_jual = 'asc';
+    else if (filters.sort === 'price_desc') orderBy.harga_jual = 'desc';
+    else orderBy.created_at = 'desc';
+
+    const products = await prisma.obat.findMany({
+        where,
+        include: {
+            jenis_obat: true,
+        },
+        orderBy,
+    })
+    return serialize(products)
+}
+
 export async function getProductById(id: string) {
     const numericId = decodeIdAsBigInt(id);
     if (!numericId) return null;

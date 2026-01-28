@@ -135,8 +135,8 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
                         {/* 1. Shipping Address */}
                         <section className="space-y-8 border-b border-slate-100 pb-12">
                             <div className="flex justify-between items-center">
-                                <h2 className="text-3xl font-black tracking-tighter uppercase italic flex items-center gap-2 text-slate-950">
-                                    Shipping Address {activeStep !== "address" && <CheckCircle2 className="size-5 text-slate-950" />}
+                                <h2 className="text-3xl font-black tracking-tighter uppercase italic flex items-center gap-2 text-primary">
+                                    Shipping Address {activeStep !== "address" && <CheckCircle2 className="size-5 text-primary" />}
                                 </h2>
                                 {activeStep !== "address" && (
                                     <Button variant="link" type="button" onClick={() => setActiveStep("address")} className="text-primary font-bold uppercase tracking-widest text-[10px]">Edit</Button>
@@ -204,7 +204,7 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
                                         </FormItem>
                                     )} />
                                     <div className="md:col-span-2 pt-4">
-                                        <Button type="button" onClick={() => handleNextStep("delivery")} className="h-12 px-8 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[11px]">Continue to delivery</Button>
+                                        <Button type="button" onClick={() => handleNextStep("delivery")} className="h-12 px-8 rounded-xl bg-primary text-white font-bold uppercase tracking-widest text-[11px] hover:bg-primary/90 transition-all">Continue to delivery</Button>
                                     </div>
                                 </div>
                             ) : (
@@ -232,8 +232,8 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
                         {/* 2. Delivery */}
                         <section className="space-y-8 border-b border-slate-100 pb-12">
                             <div className="flex justify-between items-center">
-                                <h2 className={`text-3xl font-black tracking-tighter uppercase italic flex items-center gap-2 ${activeStep === "address" ? "opacity-20" : "text-slate-950"}`}>
-                                    Delivery {activeStep === "payment" && <CheckCircle2 className="size-5 text-slate-950" />}
+                                <h2 className={`text-3xl font-black tracking-tighter uppercase italic flex items-center gap-2 ${activeStep === "address" ? "opacity-20" : "text-primary"}`}>
+                                    Delivery {activeStep === "payment" && <CheckCircle2 className="size-5 text-primary" />}
                                 </h2>
                                 {activeStep === "payment" && (
                                     <Button variant="link" type="button" onClick={() => setActiveStep("delivery")} className="text-primary font-bold uppercase tracking-widest text-[10px]">Edit</Button>
@@ -247,7 +247,7 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
                                             <FormControl>
                                                 <RadioGroup onValueChange={(val) => { field.onChange(val); setShippingCost(5000); }} defaultValue={field.value} className="grid grid-cols-1 gap-4">
                                                     {jenisPengiriman.map((method) => (
-                                                        <FormItem key={method.id.toString()} className="flex items-center space-x-3 space-y-0 rounded-2xl border p-6 hover:bg-slate-50 transition-colors cursor-pointer data-[state=checked]:border-slate-950">
+                                                        <FormItem key={method.id.toString()} className="flex items-center space-x-3 space-y-0 rounded-2xl border p-6 hover:bg-slate-50 transition-colors cursor-pointer data-[state=checked]:border-primary data-[state=checked]:bg-primary/5">
                                                             <FormControl><RadioGroupItem value={method.id.toString()} /></FormControl>
                                                             <div className="space-y-1">
                                                                 <FormLabel className="font-black text-sm uppercase tracking-tight text-slate-900 leading-none">{method.jenis_kirim}</FormLabel>
@@ -261,7 +261,7 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
                                             <FormMessage />
                                         </FormItem>
                                     )} />
-                                    <Button type="button" onClick={() => handleNextStep("payment")} className="h-12 px-8 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-widest text-[11px]">Continue to payment</Button>
+                                    <Button type="button" onClick={() => handleNextStep("payment")} className="h-12 px-8 rounded-xl bg-primary text-white font-bold uppercase tracking-widest text-[11px] hover:bg-primary/90 transition-all">Continue to payment</Button>
                                 </div>
                             )}
 
@@ -275,7 +275,7 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
 
                         {/* 3. Payment */}
                         <section className="space-y-8">
-                            <h2 className={`text-3xl font-black tracking-tighter uppercase italic flex items-center gap-2 ${activeStep !== "payment" ? "opacity-20" : "text-slate-950"}`}>
+                            <h2 className={`text-3xl font-black tracking-tighter uppercase italic flex items-center gap-2 ${activeStep !== "payment" ? "opacity-20" : "text-primary"}`}>
                                 Payment
                             </h2>
                             {activeStep === "payment" && (
@@ -284,7 +284,7 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
                                         <FormControl>
                                             <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid grid-cols-1 gap-4">
                                                 {metodeBayar.map((method) => (
-                                                    <FormItem key={method.id.toString()} className="flex flex-col items-start gap-3 space-y-0 rounded-2xl border p-6 hover:bg-slate-50 transition-colors cursor-pointer data-[state=checked]:border-slate-950">
+                                                    <FormItem key={method.id.toString()} className="flex flex-col items-start gap-3 space-y-0 rounded-2xl border p-6 hover:bg-slate-50 transition-colors cursor-pointer data-[state=checked]:border-primary data-[state=checked]:bg-primary/5">
                                                         <div className="flex items-center gap-3">
                                                             <FormControl><RadioGroupItem value={method.id.toString()} /></FormControl>
                                                             <FormLabel className="font-black text-sm uppercase tracking-tight text-slate-900 leading-none">{method.metode_pembayaran}</FormLabel>
@@ -311,7 +311,7 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
             {/* Right: Cart Summary */}
             <div className="lg:col-span-4 space-y-10 lg:sticky lg:top-24">
                 <div className="space-y-4">
-                    <h2 className="text-3xl font-black tracking-tighter uppercase italic text-slate-950">In your Cart</h2>
+                    <h2 className="text-3xl font-black tracking-tighter uppercase italic text-primary">In your Cart</h2>
                 </div>
 
                 <div className="space-y-6 pt-6 border-t border-slate-100 italic">
@@ -328,8 +328,8 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
                         <span className="font-bold text-slate-900">Rp {new Intl.NumberFormat('id-ID').format(tax)}</span>
                     </div>
                     <div className="pt-6 border-t border-slate-200 flex justify-between items-center not-italic">
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-950">Total</span>
-                        <span className="text-2xl font-black tracking-tighter text-slate-950 italic">
+                        <span className="text-xs font-black uppercase tracking-widest text-primary">Total</span>
+                        <span className="text-2xl font-black tracking-tighter text-primary italic">
                             Rp {new Intl.NumberFormat('id-ID').format(total)}
                         </span>
                     </div>
@@ -362,7 +362,7 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
                         type="submit"
                         disabled={isSubmitting || activeStep !== "payment" || !form.formState.isValid}
                         onClick={form.handleSubmit(onSubmit)}
-                        className="w-full h-16 rounded-[1.5rem] bg-slate-950 text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-primary transition-all shadow-2xl hover:shadow-primary/20 group disabled:opacity-30"
+                        className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-primary/90 transition-all shadow-2xl hover:shadow-primary/20 group disabled:opacity-30"
                     >
                         {isSubmitting ? (
                             <Loader2 className="mr-2 size-5 animate-spin" />

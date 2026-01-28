@@ -17,6 +17,7 @@ import {
   IconReport,
   IconSearch,
   IconSettings,
+  IconTruckDelivery,
   IconUsers,
 } from "@tabler/icons-react"
 
@@ -35,40 +36,15 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+import { DASHBOARD_NAV_ITEMS } from "@/lib/constants/navigation"
+
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: IconDashboard,
-    },
-    {
-      title: "Products",
-      url: "/dashboard/products",
-      icon: IconPills,
-    },
-    {
-      title: "Penjualan",
-      url: "/dashboard/sales",
-      icon: IconReport,
-    },
-    {
-      title: "Pembelian",
-      url: "/dashboard/purchases",
-      icon: IconListDetails,
-    },
-    {
-      title: "Users",
-      url: "/dashboard/users",
-      icon: IconUsers,
-      role: "admin",
-    },
-  ],
+  navMain: DASHBOARD_NAV_ITEMS,
   navClouds: [
     {
       title: "Capture",
@@ -124,23 +100,6 @@ const data = {
       icon: IconSettings,
     },
   ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -173,7 +132,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={filteredNavMain} />
-        <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

@@ -101,23 +101,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href={session?.user?.userType === "customer" ? "/profile" : "/dashboard/settings"}>
-                  <IconUserCircle className="size-4" />
-                  Account
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconCreditCard className="size-4" />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification className="size-4" />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+          
             <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
               <IconLogout className="size-4" />
               Log out

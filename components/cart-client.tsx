@@ -178,7 +178,7 @@ export function CartClient({ initialItems }: CartClientProps) {
                                         </span>
                                     </td>
                                     <td className="py-8 text-right">
-                                        <span className="font-black text-slate-950">
+                                        <span className="font-black text-primary">
                                             Rp {new Intl.NumberFormat('id-ID').format(item.subtotal)}
                                         </span>
                                     </td>
@@ -212,14 +212,14 @@ export function CartClient({ initialItems }: CartClientProps) {
                         <span className="font-bold text-slate-900">Rp {new Intl.NumberFormat('id-ID').format(tax)}</span>
                     </div>
                     <div className="pt-6 border-t border-slate-200 flex justify-between items-center">
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-950">Total</span>
-                        <span className="text-2xl font-black tracking-tighter text-slate-950 italic">
+                        <span className="text-xs font-black uppercase tracking-widest text-primary">Total</span>
+                        <span className="text-2xl font-black tracking-tighter text-primary italic">
                             Rp {new Intl.NumberFormat('id-ID').format(total)}
                         </span>
                     </div>
                 </div>
 
-                <Button asChild className="w-full h-16 rounded-[1.5rem] bg-slate-950 text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-primary transition-all shadow-2xl hover:shadow-primary/20 group">
+                <Button asChild className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-primary/90 transition-all shadow-2xl hover:shadow-primary/20 group">
                     <Link href="/checkout">
                         Go to checkout
                         <ChevronRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />

@@ -107,7 +107,7 @@ export function AddToCart({ productId, stock }: AddToCartProps) {
             <Button
                 onClick={handleAddToCart}
                 disabled={isLoading}
-                className="w-full h-16 rounded-[1.5rem] bg-slate-950 text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-primary transition-all shadow-2xl hover:shadow-primary/20 group"
+                className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-primary/90 transition-all shadow-2xl hover:shadow-primary/20 group"
             >
                 {isLoading ? (
                     <Loader2 className="mr-2 size-5 animate-spin" />

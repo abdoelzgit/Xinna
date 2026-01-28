@@ -42,7 +42,7 @@ export default async function MedicinePage({ params }: MedicinePageProps) {
                     {/* Left Column: Product Info & Details */}
                     <div className="lg:col-span-3 space-y-10 order-2 lg:order-1">
                         <div className="space-y-4">
-                            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-[0.9] text-slate-950">
+                            <h1 className="text-2xl md:text-4xl font-black tracking-tighter leading-[0.9] text-primary">
                                 {product.nama_obat}
                             </h1>
                         </div>
@@ -95,21 +95,21 @@ export default async function MedicinePage({ params }: MedicinePageProps) {
                                 </summary>
                                 <div className="pb-8 space-y-6">
                                     <div className="flex gap-4">
-                                        <Truck className="size-5 text-slate-950 shrink-0" />
+                                        <Truck className="size-5 text-primary shrink-0" />
                                         <div className="space-y-1">
                                             <span className="block text-[11px] font-black uppercase tracking-tight text-slate-900">Pengiriman Cepat</span>
                                             <p className="text-[11px] font-medium text-slate-400 leading-normal">Paket Anda akan tiba dalam 1-3 jam untuk area lokal via kurir apotek kami.</p>
                                         </div>
                                     </div>
                                     <div className="flex gap-4">
-                                        <ArrowLeftRight className="size-5 text-slate-950 shrink-0" />
+                                        <ArrowLeftRight className="size-5 text-primary shrink-0" />
                                         <div className="space-y-1">
                                             <span className="block text-[11px] font-black uppercase tracking-tight text-slate-900">Tukar Kemasan</span>
                                             <p className="text-[11px] font-medium text-slate-400 leading-normal">Kemasan rusak? Tenang, kami akan menukarnya dengan yang baru secara instan.</p>
                                         </div>
                                     </div>
                                     <div className="flex gap-4">
-                                        <RotateCcw className="size-5 text-slate-950 shrink-0" />
+                                        <RotateCcw className="size-5 text-primary shrink-0" />
                                         <div className="space-y-1">
                                             <span className="block text-[11px] font-black uppercase tracking-tight text-slate-900">Retur Mudah</span>
                                             <p className="text-[11px] font-medium text-slate-400 leading-normal">Salah beli? Kembalikan produk dan kami akan mengembalikan dana Anda sepenuhnya.</p>
@@ -131,7 +131,7 @@ export default async function MedicinePage({ params }: MedicinePageProps) {
                     {/* Right Column: Pricing & Actions */}
                     <div className="lg:col-span-3 space-y-10 order-3 lg:pt-4">
                         <div className="space-y-1">
-                            <p className="text-5xl font-black text-slate-950 tracking-tighter italic leading-none">
+                            <p className="text-4xl font-black text-black tracking-tighter italic leading-none">
                                 Rp {new Intl.NumberFormat('id-ID').format(product.harga_jual)}
                             </p>
                         </div>
@@ -152,7 +152,7 @@ export default async function MedicinePage({ params }: MedicinePageProps) {
                         <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex gap-4 items-start">
                             <Info className="size-5 text-primary shrink-0 mt-0.5" />
                             <div className="space-y-1">
-                                <span className="block text-[11px] font-black uppercase tracking-tight text-slate-950">Konsultasi Gratis</span>
+                                <span className="block text-[11px] font-black uppercase tracking-tight text-primary">Konsultasi Gratis</span>
                                 <p className="text-[11px] font-medium text-slate-500 leading-normal">Butuh rekomendasi atau panduan penggunaan? Chat apoteker kami 24/7.</p>
                             </div>
                         </div>

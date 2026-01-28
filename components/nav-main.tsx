@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarGroupLabel,
 } from "@/components/ui/sidebar"
 
 export function NavMain({
@@ -43,7 +44,9 @@ export function NavMain({
             </Button>
           </SidebarMenuItem> */}
         </SidebarMenu>
+
         <SidebarMenu>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>

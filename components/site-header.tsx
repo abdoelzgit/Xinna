@@ -14,6 +14,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { DashboardSearch } from "@/components/dashboard/dashboard-search"
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -53,7 +54,9 @@ export function SiteHeader() {
           </BreadcrumbList>
         </Breadcrumb>
 
-       
+        <div className="flex flex-1 items-center justify-end">
+          <DashboardSearch />
+        </div>
       </div>
     </header>
   )
