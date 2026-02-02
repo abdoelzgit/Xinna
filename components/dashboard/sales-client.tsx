@@ -125,10 +125,10 @@ export function SalesClient({ sales: initialSales }: SalesClientProps) {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-5">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-black uppercase italic tracking-tighter">Manajemen Penjualan</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">Manajemen Penjualan</h2>
                     <p className="text-muted-foreground text-sm font-medium">Pantau dan kelola semua transaksi pesanan masuk.</p>
                 </div>
 
@@ -178,7 +178,7 @@ export function SalesClient({ sales: initialSales }: SalesClientProps) {
                                             minute: '2-digit'
                                         })}
                                     </TableCell>
-                                    <TableCell className="font-black text-slate-900">{formatCurrency(Number(sale.total_bayar))}</TableCell>
+                                    <TableCell className="font-black text-emerald-600">{formatCurrency(Number(sale.total_bayar))}</TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className={`rounded-xl px-3 py-1 border-none shadow-sm flex items-center gap-1.5 w-fit ${config.color}`}>
                                             <Icon className="size-3" />

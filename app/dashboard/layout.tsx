@@ -6,7 +6,6 @@ import {
     SidebarInset,
     SidebarProvider,
 } from "@/components/ui/sidebar"
-
 export default function DashboardLayout({
     children,
 }: {
@@ -21,7 +20,9 @@ export default function DashboardLayout({
                 } as React.CSSProperties
             }
         >
-            <AppSidebar variant="inset" />
+            <div className="hidden md:block">
+                <AppSidebar variant="inset" />
+            </div>
             <SidebarInset>
                 <SiteHeader />
                 <div className="flex flex-1 flex-col">

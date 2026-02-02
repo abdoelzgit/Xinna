@@ -1,7 +1,7 @@
 "use client";
 
 import type { Metadata } from "next";
-import { Open_Sans } from "next/font/google";
+import { Darker_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -9,10 +9,12 @@ import { usePathname } from "next/navigation";
 import { AuthProvider } from "@/components/auth-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { AiChatWidget } from "@/components/ai-chat-widget";
+import { ChatProvider } from "@/components/chat-context";
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
+const darkerGrotesque = Darker_Grotesque({
+  variable: "--font-darker-grotesque",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export default function RootLayout({
@@ -29,15 +31,17 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${openSans.variable} antialiased font-sans flex flex-col min-h-screen`}>
+      <body className={`${darkerGrotesque.variable} antialiased font-sans flex flex-col min-h-screen`}>
         <AuthProvider>
-          {!isSpecialPage && <Header />}
-          <main className="flex-1">
-            {children}
-          </main>
-          {!isSpecialPage && <Footer />}
-          {!isSpecialPage && <AiChatWidget />}
-          <Toaster position="top-center" richColors />
+          <ChatProvider>
+            {!isSpecialPage && <Header />}
+            <main className="flex-1">
+              {children}
+            </main>
+            {!isSpecialPage && <Footer />}
+            {!isSpecialPage && <AiChatWidget />}
+            <Toaster position="top-center" richColors />
+          </ChatProvider>
         </AuthProvider>
       </body>
     </html>

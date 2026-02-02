@@ -108,7 +108,7 @@ export function ShippingsClient({ shippings: initialShippings, pendingSales: ini
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-black uppercase italic tracking-tighter text-slate-900">Log Pengiriman</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">Log Pengiriman</h2>
                     <p className="text-muted-foreground text-sm font-medium">Pantau dan catat riwayat pengiriman barang ke pelanggan.</p>
                 </div>
 
@@ -124,7 +124,7 @@ export function ShippingsClient({ shippings: initialShippings, pendingSales: ini
                     </div>
                     <Dialog open={isOpen} onOpenChange={setIsOpen}>
                         <DialogTrigger asChild>
-                            <Button className="rounded-xl h-11 px-6 font-bold uppercase tracking-widest text-[10px] gap-2 shadow-lg shadow-emerald-500/20 bg-emerald-600 hover:bg-emerald-700">
+                            <Button className="rounded-xl h-11 px-6 font-bold uppercase tracking-widest text-[10px] gap-2 shadow-lg shadow-lg bg-black hover:bg-black/90">
                                 <IconPlus className="size-4" />
                                 Catat Pengiriman
                             </Button>
@@ -198,7 +198,7 @@ export function ShippingsClient({ shippings: initialShippings, pendingSales: ini
 
                                     <DialogFooter className="pt-4">
                                         <Button type="button" variant="ghost" onClick={() => setIsOpen(false)} className="rounded-xl font-bold uppercase tracking-widest text-[10px]">Batal</Button>
-                                        <Button type="submit" disabled={isSubmitting} className="rounded-xl bg-emerald-600 hover:bg-emerald-700 h-12 px-8 font-bold uppercase tracking-widest text-[10px] min-w-[150px] shadow-lg shadow-emerald-500/20 text-white">
+                                        <Button type="submit" disabled={isSubmitting} className="rounded-xl bg-emerald-600 hover:bg-emerald-700 h-12 px-8 font-bold uppercase tracking-widest text-[10px] min-w-[150px] shadow-lg shadow-black text-white">
                                             {isSubmitting ? <IconLoader2 className="size-4 animate-spin" /> : "Simpan Log"}
                                         </Button>
                                     </DialogFooter>

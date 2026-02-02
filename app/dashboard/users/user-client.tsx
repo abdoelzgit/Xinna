@@ -150,7 +150,7 @@ export function UserClient({ initialUsers, initialCustomers }: UserClientProps) 
                                                     <IconUser className="size-4 text-muted-foreground" />
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="font-semibold">{user.name}</TableCell>
+                                            <TableCell className="font-medium">{user.name}</TableCell>
                                             <TableCell className="text-muted-foreground">{user.email}</TableCell>
                                             <TableCell>
                                                 <Badge variant="secondary" className="capitalize font-medium">

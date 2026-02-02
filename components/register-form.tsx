@@ -72,10 +72,10 @@ export function RegisterForm({
     }
 
     return (
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
+        <div className={cn("flex flex-col gap-3", className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Create an account</CardTitle>
+                    <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
                     <CardDescription>
                         Enter your details to register as a customer
                     </CardDescription>

@@ -21,6 +21,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 
+
 import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
@@ -37,6 +38,8 @@ import {
 } from "@/components/ui/sidebar"
 
 import { DASHBOARD_NAV_ITEMS } from "@/lib/constants/navigation"
+import Image from "next/image"
+import Link from "next/link";
 
 const data = {
   user: {
@@ -122,10 +125,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link href="/" className="flex items-center space-x-2 justify-center">
+                <Image
+                  src="https://res.cloudinary.com/djxplzruy/image/upload/v1769671252/qsiqelb26rr3t9tjsrkl.png"
+                  alt="Xinna Logo"
+                  width={240}
+                  height={40}
+                  className="h-6 w-auto object-contain"
+                />
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

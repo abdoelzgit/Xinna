@@ -139,11 +139,11 @@ export function ProductClient({ initialProducts, categories }: ProductClientProp
                                             )}
                                         </div>
                                     </TableCell>
-                                    <TableCell>{product.jenis_obat?.jenis || "-"}</TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className=" font-medium">{product.jenis_obat?.jenis || "-"}</TableCell>
+                                    <TableCell className="text-right font-black text-emerald-600">
                                         Rp {new Intl.NumberFormat("id-ID").format(product.harga_jual)}
                                     </TableCell>
-                                    <TableCell className="text-right">{product.stok}</TableCell>
+                                    <TableCell className="text-right font-bold text-slate-900">{product.stok}</TableCell>
                                     <TableCell>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>

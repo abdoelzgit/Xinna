@@ -1,11 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { IconMessageChatbot, IconX, IconSend, IconRobot, IconUser } from "@tabler/icons-react"
+import { IconMessageChatbot, IconX, IconSend, IconRobot, IconUser, IconPill } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { useChat } from "@/components/chat-context"
+import Link from "next/link"
+import Image from "next/image"
 
 interface Message {
     role: "user" | "model"
@@ -13,11 +16,20 @@ interface Message {
 }
 
 export function AiChatWidget() {
-    const [isOpen, setIsOpen] = React.useState(false)
+    const { isOpen, closeChat, initialMessage, setInitialMessage } = useChat()
     const [messages, setMessages] = React.useState<Message[]>([])
     const [input, setInput] = React.useState("")
     const [isLoading, setIsLoading] = React.useState(false)
     const scrollRef = React.useRef<HTMLDivElement>(null)
+
+    // Handle initial message from hero search
+    React.useEffect(() => {
+        if (isOpen && initialMessage) {
+            const msg = initialMessage
+            setInitialMessage(null) // Clear it so it doesn't trigger again
+            handleSendMessage(msg)
+        }
+    }, [isOpen, initialMessage])
 
     // Auto-scroll to bottom
     React.useEffect(() => {
@@ -26,13 +38,13 @@ export function AiChatWidget() {
         }
     }, [messages, isOpen])
 
-    const handleSend = async (e?: React.FormEvent) => {
-        e?.preventDefault()
-        if (!input.trim() || isLoading) return
+    const handleSendMessage = async (customMsg?: string) => {
+        const messageToSend = customMsg || input.trim()
+        if (!messageToSend || isLoading) return
 
-        const userMsg = input.trim()
-        setInput("")
-        setMessages(prev => [...prev, { role: "user", content: userMsg }])
+        if (!customMsg) setInput("")
+
+        setMessages(prev => [...prev, { role: "user", content: messageToSend }])
         setIsLoading(true)
 
         try {
@@ -46,7 +58,7 @@ export function AiChatWidget() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    message: userMsg,
+                    message: messageToSend,
                     history: history
                 })
             })
@@ -66,26 +78,36 @@ export function AiChatWidget() {
     }
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 font-sans">
-            <AnimatePresence>
-                {isOpen && (
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    {/* Backdrop */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={closeChat}
+                        className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                    />
+
+                    {/* Chat Window */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="w-[350px] md:w-[400px] h-[500px] bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col overflow-hidden"
+                        className="relative w-full max-w-[450px] h-[600px] bg-white rounded-lg shadow-2xl border border-slate-100 flex flex-col overflow-hidden"
                     >
                         {/* Header */}
-                        <div className="p-4 bg-slate-900 flex justify-between items-center text-white shrink-0">
+                        <div className="p-4 bg-blue-800 flex justify-between items-center text-white shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="size-10 rounded-full bg-white/10 flex items-center justify-center">
-                                    <IconRobot className="size-6 text-emerald-400" />
+                                <div className="size-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                                    <IconRobot className="size-6 text-emerald-600" />
                                 </div>
                                 <div>
-                                    <h3 className="font-black uppercase italic tracking-tighter text-sm">Xinna AI Pharmacist</h3>
-                                    <p className="text-[10px] text-slate-400 font-medium flex items-center gap-1.5">
-                                        <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                    <h3 className="font-black uppercase tracking-tighter text-sm">Xin</h3>
+                                    <p className="text-[10px] text-white/60 font-medium flex items-center gap-1.5">
+                                        <span className="size-2 rounded-full border border-white bg-green-300 animate-pulse" />
                                         Online & Ready to Help
                                     </p>
                                 </div>
@@ -94,7 +116,7 @@ export function AiChatWidget() {
                                 variant="ghost"
                                 size="icon"
                                 className="text-white hover:bg-white/10 rounded-xl size-8"
-                                onClick={() => setIsOpen(false)}
+                                onClick={closeChat}
                             >
                                 <IconX className="size-5" />
                             </Button>
@@ -123,17 +145,31 @@ export function AiChatWidget() {
                                 >
                                     <div className={cn(
                                         "size-8 rounded-full flex items-center justify-center shrink-0 shadow-sm",
-                                        msg.role === "user" ? "bg-slate-900 text-white" : "bg-emerald-100 text-emerald-600"
+                                        msg.role === "user" ? "bg-blue-800 text-white" : "bg-emerald-100 text-emerald-600"
                                     )}>
                                         {msg.role === "user" ? <IconUser className="size-4" /> : <IconRobot className="size-4" />}
                                     </div>
                                     <div className={cn(
                                         "p-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm",
                                         msg.role === "user"
-                                            ? "bg-slate-900 text-white rounded-tr-none"
+                                            ? "bg-blue-800 text-white rounded-tr-none"
                                             : "bg-white text-slate-700 rounded-tl-none border border-slate-100"
                                     )}>
-                                        {msg.content}
+                                        {msg.role === "model" ? (
+                                            msg.content.split(/\[PRODUCT:(.*?)\]/).map((part, index) => {
+                                                if (index % 2 === 1) {
+                                                    try {
+                                                        const product = JSON.parse(part)
+                                                        return <ChatProductCard key={index} product={product} />
+                                                    } catch (e) {
+                                                        return null
+                                                    }
+                                                }
+                                                return <span key={index}>{part}</span>
+                                            })
+                                        ) : (
+                                            msg.content
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -156,10 +192,16 @@ export function AiChatWidget() {
 
                         {/* Input Area */}
                         <div className="p-3 bg-white border-t border-slate-100 shrink-0">
-                            <form onSubmit={handleSend} className="flex gap-2 relative">
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault()
+                                    handleSendMessage()
+                                }}
+                                className="flex gap-2 relative"
+                            >
                                 <Input
                                     className="rounded-xl border-slate-200 bg-slate-50 focus-visible:ring-emerald-500/20 pr-10 h-11 text-sm"
-                                    placeholder="Ketik pertanyaan..."
+                                    placeholder="Apa keluhan anda?"
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     disabled={isLoading}
@@ -175,25 +217,38 @@ export function AiChatWidget() {
                             </form>
                         </div>
                     </motion.div>
+                </div>
+            )}
+        </AnimatePresence>
+    )
+}
+
+function ChatProductCard({ product }: { product: any }) {
+    return (
+        <div className="mt-3 bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow max-w-[280px]">
+            <Link href={`/medicine/${product.id}`} className="block group/card">
+                {product.image ? (
+                    <div className="relative aspect-video w-full overflow-hidden">
+                        <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                        />
+                    </div>
+                ) : (
+                    <div className="aspect-video w-full bg-slate-100 flex items-center justify-center">
+                        <IconPill className="size-8 text-slate-300" />
+                    </div>
                 )}
-            </AnimatePresence>
-
-            <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-            >
-                <Button
-                    size="icon"
-                    className="size-14 rounded-full shadow-2xl bg-slate-900 hover:bg-emerald-600 text-white transition-colors relative"
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    {isOpen ? <IconX className="size-6" /> : <IconMessageChatbot className="size-7" />}
-
-                    {!isOpen && (
-                        <span className="absolute top-0 right-0 size-4 bg-rose-500 rounded-full border-2 border-white animate-pulse" />
-                    )}
-                </Button>
-            </motion.div>
+                <div className="p-3">
+                    <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-1">Rekomendasi</p>
+                    <h4 className="font-bold text-slate-900 leading-tight mb-1 truncate">{product.name}</h4>
+                    <p className="text-sm font-black text-slate-900 italic tracking-tighter">
+                        Rp {new Intl.NumberFormat('id-ID').format(product.price)}
+                    </p>
+                </div>
+            </Link>
         </div>
     )
 }

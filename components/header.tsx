@@ -3,6 +3,7 @@
 import * as React from "react"
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
+import Image from "next/image"
 import {
     IconUserCircle,
     IconSettings,
@@ -65,7 +66,13 @@ export function Header() {
 
                 <div className="flex items-center gap-2">
                     <Link href="/" className="flex items-center space-x-2">
-                        <span className="text-xl font-extrabold tracking-tighter text-slate-900 font-sans uppercase">Xinna</span>
+                        <Image
+                            src="https://res.cloudinary.com/djxplzruy/image/upload/v1769671252/qsiqelb26rr3t9tjsrkl.png"
+                            alt="Xinna Logo"
+                            width={240}
+                            height={40}
+                            className="h-6 w-auto object-contain"
+                        />
                     </Link>
                 </div>
 

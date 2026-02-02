@@ -70,6 +70,20 @@ export async function getDashboardStats() {
             }
         })
 
+        // 5. Recent Purchases for Table
+        const recentPurchases = await prisma.pembelian.findMany({
+            take: 10,
+            orderBy: { created_at: "desc" },
+            include: {
+                distributor: true,
+                details: {
+                    include: {
+                        obat: true
+                    }
+                }
+            }
+        })
+
         // Growth Calculation
         const revGrowth = prevMonthRevenue._sum.total_bayar
             ? ((currentMonthRevenue._sum.total_bayar || 0) - prevMonthRevenue._sum.total_bayar) / prevMonthRevenue._sum.total_bayar * 100
@@ -84,7 +98,8 @@ export async function getDashboardStats() {
                 totalCustomers,
             },
             chartData,
-            recentOrders
+            recentOrders,
+            recentPurchases
         })
     } catch (error) {
         console.error("Dashboard Stats Error:", error)
