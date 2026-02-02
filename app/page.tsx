@@ -15,11 +15,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+
 import { HyperText } from "@/components/ui/hyper-text";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { Marquee } from "@/components/ui/marquee";
+import { Testimonials } from "@/components/testimonials";
 
 
 export default function Home() {
@@ -88,83 +91,105 @@ export default function Home() {
           <div className="min-h-[140px] flex items-center justify-center">
             <TypingAnimation
               cursorStyle="underscore"
-className="text-6xl md:text-7xl font-bold uppercase tracking-tight text-primary leading-tight"
+              className="text-6xl md:text-7xl font-bold uppercase tracking-tight text-slate-900 leading-tight"
               duration={50}
               onComplete={() => setHasFinishedTyping(true)}
             >
               Your Personal Health Agent
             </TypingAnimation>
           </div>
-    <div className="space-y-6">
+          <div className="space-y-6">
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={hasFinishedTyping ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.8 }}
-            className={!hasFinishedTyping ? "pointer-events-none" : ""}
-          >
-            <RotatingQuotes />
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={hasFinishedTyping ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.8 }}
+              className={!hasFinishedTyping ? "pointer-events-none" : ""}
+            >
+              <RotatingQuotes />
+            </motion.div>
 
 
-          {/* Search Box */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={hasFinishedTyping ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className={`max-w-2xl mx-auto w-full ${!hasFinishedTyping ? "pointer-events-none" : ""}`}
-            style={{ visibility: hasFinishedTyping ? "visible" : "hidden" }} // Use visibility hidden to keep layout but hide content during typing if opacity is not enough for screen readers/focus
-          // Actually opacity 0 keeps layout. Visibility hidden removes it from accessibility tree but keeps layout.
-          // Let's stick to opacity for visual, but maybe visibility to avoid tab focus.
-          >
-            <form onSubmit={handleSearch} className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative flex items-center bg-white border border-slate-200 rounded-[2rem] p-2 shadow-2xl shadow-primary/5 transition-all focus-within:border-primary/40 focus-within:ring-1 focus-within:ring-primary/5">
-                <div className="pl-6 text-slate-400">
-                  <FileQuestionMark className="size-6" />
+            {/* Search Box */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={hasFinishedTyping ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className={`max-w-2xl mx-auto w-full ${!hasFinishedTyping ? "pointer-events-none" : ""}`}
+              style={{ visibility: hasFinishedTyping ? "visible" : "hidden" }} // Use visibility hidden to keep layout but hide content during typing if opacity is not enough for screen readers/focus
+            // Actually opacity 0 keeps layout. Visibility hidden removes it from accessibility tree but keeps layout.
+            // Let's stick to opacity for visual, but maybe visibility to avoid tab focus.
+            >
+              <form onSubmit={handleSearch} className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative flex items-center bg-white border border-slate-200 rounded-[2rem] p-2 shadow-2xl shadow-primary/5 transition-all focus-within:border-primary/40 focus-within:ring-1 focus-within:ring-primary/5">
+                  <div className="pl-6 text-slate-400">
+                    <FileQuestionMark className="size-6" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Tell us about your symptoms"
+                    className="flex-1 bg-transparent border-none outline-none px-4 py-4 text-lg font-medium placeholder:text-slate-400"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="bg-primary text-white px-8 py-4 rounded-[1.5rem] font-bold uppercase tracking-widest text-xs hover:bg-primary/90 transition-all transform active:scale-95"
+                  >
+                    Consult
+                  </button>
                 </div>
-                <input
-                  type="text"
-                  placeholder="Bagaimana keluhan Anda?"
-                  className="flex-1 bg-transparent border-none outline-none px-4 py-4 text-lg font-medium placeholder:text-slate-400"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button
-                  type="submit"
-                  className="bg-primary text-white px-8 py-4 rounded-[1.5rem] font-bold uppercase tracking-widest text-xs hover:bg-primary/90 transition-all transform active:scale-95"
-                >
-                  Konsultasi
-                </button>
-              </div>
-            </form>
+              </form>
 
-            <div className="flex flex-wrap justify-center gap-3 mt-6">
-              {['Pusing', 'Flu & Batuk', 'Vitamin', 'P3K'].map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => openChat(`Saya butuh rekomendasi untuk ${tag}`)}
-                  className="text-[10px] bg-white font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-colors border border-slate-300 rounded-full px-4 py-1.5 hover:border-primary/20"
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-          </motion.div>
+              <div className="flex flex-wrap justify-center gap-3 mt-6">
+                {['Headache', 'Flu & Cough', 'Vitamin', 'First Aid'].map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => openChat(`I need a recommendation for ${tag}`)}
+                    className="text-[10px] bg-white font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-colors border border-slate-300 rounded-full px-4 py-1.5 hover:border-primary/20"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </div>
         </div>
-    </div>
       </section >
+
+      <div className="py-24 mx-auto border-slate-100">
+        <Marquee fade pauseOnHover className="[--duration:40s]">
+          {[
+            "https://res.cloudinary.com/djxplzruy/image/upload/v1770018065/gavxblgfqe0b9kgbphtg.svg",
+            "https://res.cloudinary.com/djxplzruy/image/upload/v1770018063/g80gsatrf8a7djyyoijr.svg",
+            "https://res.cloudinary.com/djxplzruy/image/upload/v1770017823/ibugsesprskv6rbh2hdj.svg",
+            "https://res.cloudinary.com/djxplzruy/image/upload/v1770017823/s304hjna65x87cybfx9j.svg",
+            "https://res.cloudinary.com/djxplzruy/image/upload/v1770017824/ju2a7qo2xqwnoy3nnve5.svg"
+          ].map((brand) => (
+            <div key={brand} className="flex items-center justify-center px-8 grayscale hover:grayscale-0 transition-all duration-300 opacity-50 hover:opacity-100">
+              <Image
+                src={brand}
+                alt={brand}
+                width={360}
+                height={120}
+                className="h-12 md:h-32 w-auto object-contain"
+              />
+            </div>
+          ))}
+        </Marquee>
+      </div>
 
       {/* Product Grid */}
       <motion.main
         ref={sectionRef}
         style={{ opacity, y, scale }}
-        className="container px-4 md:px-8 py-12 mx-auto shadow-2xl shadow-primary/5 rounded-[3rem] bg-white border border-slate-100 relative z-20"
+        className="container px-4 md:px-8 py-32 mx-auto shadow-2xl shadow-primary/5 rounded-[3rem] bg-white border border-slate-100 relative z-20"
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
           <div className="space-y-2">
-            <h2 className="text-3xl font-black uppercase tracking-tighter">Featured Products</h2>
-            <p className="text-slate-400 text-lg font-medium">Koleksi obat-obatan terbaik pilihan kami.</p>
+            <h2 className="text-3xl font-black uppercase tracking-tighter">Our Products</h2>
+            <p className="text-slate-400 text-lg font-medium">Our curated collection of premium medications.</p>
           </div>
           <Link href="/products" className="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors border-b-2 border-primary hover:border-primary pb-1 w-fit">
             View All Products
@@ -181,7 +206,7 @@ className="text-6xl md:text-7xl font-bold uppercase tracking-tight text-primary 
           <CarouselContent className="md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-x-6 lg:gap-x-10 md:gap-y-20 md:ml-0">
             {displayedMedicines.length === 0 ? (
               <div className="col-span-full h-40 flex items-center justify-center text-slate-300 italic min-w-full">
-                Belum ada produk yang tersedia.
+                No products available yet.
               </div>
             ) : (
               displayedMedicines.map((item: any) => (
@@ -196,6 +221,9 @@ className="text-6xl md:text-7xl font-bold uppercase tracking-tight text-primary 
         </Carousel>
 
       </motion.main>
+
+      {/* Testimonials Section */}
+      <Testimonials />
 
       {/* Newsletter */}
       {/* Contact Section */}
@@ -224,15 +252,15 @@ className="text-6xl md:text-7xl font-bold uppercase tracking-tight text-primary 
             <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-80" />
           </div>
 
-          
+
 
           {/* Content */}
           <div className="relative z-10 text-center space-y-8 max-w-2xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-slate-900 leading-tight">
-              Get in Touch
+              Any question?
             </h2>
             <p className="text-slate-500 text-lg md:text-xl font-medium max-w-xl mx-auto leading-relaxed">
-              Want to chat? Just shoot me a dm <span className="text-blue-500 font-bold decoration-blue-500/30 underline-offset-4 decoration-2">with a direct question on twitter</span> and I'll respond whenever I can. I will ignore all soliciting.
+              Have questions about medication or need trusted medical advice? Our team of pharmacists is ready to assist you <span className="text-primary font-bold">anytime</span> to ensure your health is always the top priority.
             </p>
           </div>
         </motion.div>

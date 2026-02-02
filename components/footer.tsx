@@ -11,7 +11,7 @@ export function Footer() {
                     <h2 className="text-[12vw] font-black tracking-tighter leading-none text-black select-none opacity-[0.03] absolute left-0 right-0 text-center pointer-events-none uppercase">
                         Xinna Pharmacy
                     </h2>
-                    <h2 className="text-[12vw] font-black tracking-tighter leading-none text-black select-none text-center uppercase">
+                    <h2 className="text-[12vw] font-black tracking-tighter leading-none text-slate-900 select-none text-center uppercase">
                         Xinna Pharmacy
                     </h2>
                 </div>

@@ -99,7 +99,7 @@ export function AiChatWidget() {
                         className="relative w-full max-w-[450px] h-[600px] bg-white rounded-lg shadow-2xl border border-slate-100 flex flex-col overflow-hidden"
                     >
                         {/* Header */}
-                        <div className="p-4 bg-blue-800 flex justify-between items-center text-white shrink-0">
+                        <div className="p-4 bg-slate-900 flex justify-between items-center text-white shrink-0">
                             <div className="flex items-center gap-3">
                                 <div className="size-10 rounded-full bg-emerald-100 flex items-center justify-center">
                                     <IconRobot className="size-6 text-emerald-600" />
@@ -145,14 +145,14 @@ export function AiChatWidget() {
                                 >
                                     <div className={cn(
                                         "size-8 rounded-full flex items-center justify-center shrink-0 shadow-sm",
-                                        msg.role === "user" ? "bg-blue-800 text-white" : "bg-emerald-100 text-emerald-600"
+                                        msg.role === "user" ? "bg-slate-900 text-white" : "bg-emerald-100 text-emerald-600"
                                     )}>
                                         {msg.role === "user" ? <IconUser className="size-4" /> : <IconRobot className="size-4" />}
                                     </div>
                                     <div className={cn(
                                         "p-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm",
                                         msg.role === "user"
-                                            ? "bg-blue-800 text-white rounded-tr-none"
+                                            ? "bg-slate-900 text-white rounded-tr-none"
                                             : "bg-white text-slate-700 rounded-tl-none border border-slate-100"
                                     )}>
                                         {msg.role === "model" ? (
@@ -210,7 +210,7 @@ export function AiChatWidget() {
                                     size="icon"
                                     type="submit"
                                     disabled={!input.trim() || isLoading}
-                                    className="rounded-xl bg-slate-900 hover:bg-slate-800 text-white absolute right-1 top-1 bottom-1 h-auto w-9 shadow-md transition-all hover:scale-95 active:scale-90"
+                                    className="rounded-xl bg-slate-900 hover:bg-slate-900 text-white absolute right-1 top-1 bottom-1 h-auto w-9 shadow-md transition-all hover:scale-95 active:scale-90"
                                 >
                                     <IconSend className="size-4" />
                                 </Button>
@@ -242,7 +242,7 @@ function ChatProductCard({ product }: { product: any }) {
                     </div>
                 )}
                 <div className="p-3">
-                    <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-1">Rekomendasi</p>
+                    <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-1">Rekomendasi</p>
                     <h4 className="font-bold text-slate-900 leading-tight mb-1 truncate">{product.name}</h4>
                     <p className="text-sm font-black text-slate-900 italic tracking-tighter">
                         Rp {new Intl.NumberFormat('id-ID').format(product.price)}

@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getProfileData } from "@/lib/actions/customer-actions"
+import { getUserPurchases } from "@/lib/actions/sales-actions"
 import { ProfileClient } from "@/components/profile-client"
 import { redirect } from "next/navigation"
 
@@ -12,6 +13,7 @@ export default async function ProfilePage() {
     }
 
     const result = await getProfileData(session.user?.email!)
+    const purchases = await getUserPurchases(session.user?.email!)
 
     if (result.error) {
         return (
@@ -27,6 +29,7 @@ export default async function ProfilePage() {
                 user={session.user}
                 initialData={result.data}
                 type={result.type as any}
+                purchases={purchases}
             />
         </div>
     )

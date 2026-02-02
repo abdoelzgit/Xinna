@@ -49,3 +49,31 @@ export async function updateOrderStatus(id: string, status: StatusOrder) {
         return { error: "Gagal memperbarui status pesanan." }
     }
 }
+
+export async function getUserPurchases(email: string) {
+    try {
+        const purchases = await prisma.penjualan.findMany({
+            where: {
+                pelanggan: {
+                    email: email
+                }
+            },
+            include: {
+                details: {
+                    include: {
+                        obat: true
+                    }
+                },
+                jenis_pengiriman: true,
+                metode_bayar: true
+            },
+            orderBy: {
+                created_at: "desc"
+            }
+        })
+        return serialize(purchases)
+    } catch (error) {
+        console.error("Failed to fetch user purchases:", error)
+        return []
+    }
+}

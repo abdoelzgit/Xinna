@@ -41,8 +41,8 @@ export function RegisterForm({
         e.preventDefault()
 
         if (!formData.nama_pelanggan || !formData.email || !formData.katakunci) {
-            toast.error("Mohon isi semua bidang wajib", {
-                description: "Nama, Email, dan Password harus diisi.",
+            toast.error("Please fill in all required fields", {
+                description: "Name, Email, and Password are required.",
             })
             return
         }
@@ -53,18 +53,18 @@ export function RegisterForm({
             const result = await registerCustomer(formData)
 
             if (result.error) {
-                toast.error("Gagal Registrasi", {
+                toast.error("Registration Failed", {
                     description: result.error,
                 })
             } else {
-                toast.success("Registrasi Berhasil", {
-                    description: "Akun Anda telah dibuat. Silakan login.",
+                toast.success("Registration Successful", {
+                    description: "Your account has been created. Please log in.",
                 })
                 router.push("/login")
             }
         } catch (err) {
-            toast.error("Kesalahan Sistem", {
-                description: "Terjadi kesalahan saat mencoba mendaftar.",
+            toast.error("System Error", {
+                description: "An error occurred while trying to register.",
             })
         } finally {
             setIsLoading(false)

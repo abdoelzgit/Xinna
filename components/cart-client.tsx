@@ -54,9 +54,9 @@ export function CartClient({ initialItems }: CartClientProps) {
                     ? { ...item, jumlah_beli: newQuantity, subtotal: item.harga_beli * newQuantity }
                     : item
             ))
-            toast.success("Keranjang diperbarui")
+            toast.success("Cart updated")
         } catch (error: any) {
-            toast.error("Gagal memperbarui kuantitas")
+            toast.error("Failed to update quantity")
         } finally {
             setIsUpdating(null)
             router.refresh()
@@ -68,9 +68,9 @@ export function CartClient({ initialItems }: CartClientProps) {
         try {
             await removeFromCart(cartId)
             setItems(prev => prev.filter(item => item.id !== cartId))
-            toast.success("Produk dihapus dari keranjang")
+            toast.success("Product removed from cart")
         } catch (error) {
-            toast.error("Gagal menghapus produk")
+            toast.error("Failed to remove product")
         } finally {
             setIsUpdating(null)
             router.refresh()
@@ -84,11 +84,11 @@ export function CartClient({ initialItems }: CartClientProps) {
                     <ShoppingBag className="size-12 text-slate-200" />
                 </div>
                 <div className="text-center space-y-2">
-                    <h2 className="text-2xl font-black tracking-tight">Keranjang Kosong</h2>
-                    <p className="text-slate-500 max-w-xs mx-auto">Sepertinya Anda belum menambahkan produk apapun ke keranjang.</p>
+                    <h2 className="text-2xl font-black tracking-tight">Empty Cart</h2>
+                    <p className="text-slate-500 max-w-xs mx-auto">It looks like you haven't added any products to your cart yet.</p>
                 </div>
                 <Button asChild className="rounded-2xl h-12 px-8 font-bold uppercase tracking-widest text-[11px]">
-                    <Link href="/">Belanja Sekarang</Link>
+                    <Link href="/">Shop Now</Link>
                 </Button>
             </div>
         )
@@ -99,8 +99,8 @@ export function CartClient({ initialItems }: CartClientProps) {
             {/* Left: Cart Items */}
             <div className="lg:col-span-8 space-y-8">
                 <div className="space-y-1">
-                    <h1 className="text-4xl font-black tracking-tighter uppercase italic">Keranjang</h1>
-                    <p className="text-slate-400 text-sm font-medium">{items.length} Item dalam keranjang Anda</p>
+                    <h1 className="text-4xl font-black tracking-tighter uppercase italic">Cart</h1>
+                    <p className="text-slate-400 text-sm font-medium">{items.length} {items.length === 1 ? 'item' : 'items'} in your cart</p>
                 </div>
 
                 <div className="border-t border-slate-100">

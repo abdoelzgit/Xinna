@@ -57,7 +57,7 @@ export function ProductCard({ product: item }: ProductCardProps) {
             <div className="flex flex-col space-y-3 px-2">
                 <div className="flex items-center gap-3">
                     <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-slate-500">
-                        {item.jenis_obat?.jenis || "Umum"}
+                        {item.jenis_obat?.jenis || "General"}
                     </span>
                     <div className="h-[1px] flex-1 bg-slate-100" />
                 </div>

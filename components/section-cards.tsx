@@ -28,7 +28,7 @@ export function SectionCards({ stats }: SectionCardsProps) {
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Pendapatan</CardDescription>
+          <CardDescription>Total Revenue</CardDescription>
           <CardTitle className="text-xl font-bold tabular-nums @[250px]/card:text-2xl">
             {formatCurrency(stats.totalRevenue)}
           </CardTitle>
@@ -40,43 +40,43 @@ export function SectionCards({ stats }: SectionCardsProps) {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-[10px] uppercase font-black tracking-widest text-slate-400">
-          Tren dibanding bulan lalu
+          Trend vs last month
         </CardFooter>
       </Card>
 
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Transaksi</CardDescription>
+          <CardDescription>Total Transactions</CardDescription>
           <CardTitle className="text-2xl font-bold tabular-nums @[250px]/card:text-3xl">
             {stats.totalSales}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-[10px] uppercase font-black tracking-widest text-slate-400">
-          Jumlah pesanan diproses
+          Orders processed
         </CardFooter>
       </Card>
 
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Produk</CardDescription>
+          <CardDescription>Total Products</CardDescription>
           <CardTitle className="text-2xl font-bold tabular-nums @[250px]/card:text-3xl">
             {stats.totalProducts}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-[10px] uppercase font-black tracking-widest text-slate-400">
-          Obat yang terdaftar
+          Registered medicines
         </CardFooter>
       </Card>
 
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Pelanggan</CardDescription>
+          <CardDescription>Total Customers</CardDescription>
           <CardTitle className="text-2xl font-bold tabular-nums @[250px]/card:text-3xl">
             {stats.totalCustomers}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-[10px] uppercase font-black tracking-widest text-slate-400">
-          User terdaftar di aplikasi
+          Users registered in app
         </CardFooter>
       </Card>
     </div>

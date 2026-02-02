@@ -28,16 +28,16 @@ import {
 import { createOrder } from "@/lib/actions/checkout-actions"
 
 const checkoutSchema = z.object({
-    firstName: z.string().min(1, "Nama depan wajib diisi"),
-    lastName: z.string().min(1, "Nama belakang wajib diisi"),
-    address: z.string().min(5, "Alamat lengkap wajib diisi"),
-    city: z.string().min(1, "Kota wajib diisi"),
-    province: z.string().min(1, "Provinsi wajib diisi"),
-    postalCode: z.string().min(5, "Kodepos wajib diisi"),
-    email: z.string().email("Email tidak valid"),
-    phone: z.string().min(10, "Nomor telepon tidak valid"),
-    shippingMethod: z.string().min(1, "Pilih metode pengiriman"),
-    paymentMethod: z.string().min(1, "Pilih metode pembayaran"),
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    address: z.string().min(5, "Full address is required"),
+    city: z.string().min(1, "City is required"),
+    province: z.string().min(1, "Province is required"),
+    postalCode: z.string().min(5, "Postal code is required"),
+    email: z.string().email("Invalid email"),
+    phone: z.string().min(10, "Invalid phone number"),
+    shippingMethod: z.string().min(1, "Select shipping method"),
+    paymentMethod: z.string().min(1, "Select payment method"),
 })
 
 interface CheckoutClientProps {
@@ -107,13 +107,13 @@ export function CheckoutClient({ cartItems, pelanggan, metodeBayar, jenisPengiri
             })
 
             if (result.success) {
-                toast.success("Pesanan Berhasil!", {
-                    description: "Pesanan Anda sedang kami proses."
+                toast.success("Order Successful!", {
+                    description: "Your order is being processed."
                 })
                 router.push(`/profile`)
             }
         } catch (error: any) {
-            toast.error("Gagal membuat pesanan", {
+            toast.error("Failed to place order", {
                 description: error.message
             })
         } finally {

@@ -33,8 +33,8 @@ export function AddToCart({ productId, stock }: AddToCartProps) {
 
     const handleAddToCart = async () => {
         if (!session) {
-            toast.error("Silakan login terlebih dahulu", {
-                description: "Anda harus login sebagai pelanggan untuk berbelanja.",
+            toast.error("Please login first", {
+                description: "You must login as a customer to shop.",
                 action: {
                     label: "Login",
                     onClick: () => router.push("/login")
@@ -44,8 +44,8 @@ export function AddToCart({ productId, stock }: AddToCartProps) {
         }
 
         if ((session.user as any).userType !== "customer") {
-            toast.error("Akses Ditolak", {
-                description: "Hanya akun pelanggan yang dapat menambahkan item ke keranjang."
+            toast.error("Access Denied", {
+                description: "Only customer accounts can add items to the cart."
             })
             return
         }
@@ -54,19 +54,19 @@ export function AddToCart({ productId, stock }: AddToCartProps) {
         try {
             const result = await addToCart(productId, quantity)
             if (result.success) {
-                toast.success("Berhasil!", {
-                    description: `${quantity} item telah ditambahkan ke keranjang.`
+                toast.success("Success!", {
+                    description: `${quantity} ${quantity === 1 ? 'item has' : 'items have'} been added to your cart.`
                 })
                 router.refresh()
             }
         } catch (error: any) {
             console.error("Cart Error:", error)
-            let message = "Gagal menambahkan item ke keranjang."
+            let message = "Failed to add item to cart."
 
             if (error.message === "INSUFFICIENT_STOCK") {
-                message = "Stok tidak mencukupi."
+                message = "Insufficient stock."
             } else if (error.message === "INSUFFICIENT_STOCK_TOTAL") {
-                message = "Total item di keranjang melebihi stok yang tersedia."
+                message = "Total item in cart exceeds available stock."
             }
 
             toast.error("Oops!", { description: message })
@@ -100,7 +100,7 @@ export function AddToCart({ productId, stock }: AddToCartProps) {
                     </Button>
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-tighter text-slate-400">
-                    Sisa {stock} Unit
+                    {stock} units left
                 </span>
             </div>
 
@@ -114,7 +114,7 @@ export function AddToCart({ productId, stock }: AddToCartProps) {
                 ) : (
                     <ShoppingCart className="mr-2 size-5 transition-transform group-hover:scale-110" />
                 )}
-                {isLoading ? "Memproses..." : "Tambahkan Ke Keranjang"}
+                {isLoading ? "Processing..." : "Add to Cart"}
             </Button>
         </div>
     )

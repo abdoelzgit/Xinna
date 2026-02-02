@@ -37,8 +37,8 @@ function LoginFormInner({
   useEffect(() => {
     const errorParam = searchParams.get("error")
     if (errorParam === "unauthorized") {
-      toast.error("Wajib login terlebih dahulu", {
-        description: "Halaman ini memerlukan autentikasi.",
+      toast.error("Login required", {
+        description: "This page requires authentication.",
         duration: 4000,
       })
 
@@ -61,13 +61,13 @@ function LoginFormInner({
       })
 
       if (result?.error) {
-        toast.error("Gagal Login", {
-          description: "Email atau password yang Anda masukkan salah.",
+        toast.error("Login Failed", {
+          description: "The email or password you entered is incorrect.",
         })
-        setError("Email atau password salah")
+        setError("Invalid email or password")
       } else {
-        toast.success("Login Berhasil", {
-          description: "Selamat datang kembali!",
+        toast.success("Login Successful", {
+          description: "Welcome back!",
         })
 
         // Ambil session terbaru untuk menentukan arah redirect
@@ -83,10 +83,10 @@ function LoginFormInner({
         router.refresh()
       }
     } catch (err) {
-      toast.error("Kesalahan Sistem", {
-        description: "Terjadi kesalahan saat mencoba login.",
+      toast.error("System Error", {
+        description: "An error occurred while trying to log in.",
       })
-      setError("Terjadi kesalahan saat login")
+      setError("An error occurred during login")
     } finally {
       setIsLoading(false)
     }
@@ -104,7 +104,7 @@ function LoginFormInner({
         <CardContent>
           <form onSubmit={handleSubmit}>
             <FieldGroup>
-                            <Field>
+              <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
@@ -137,12 +137,12 @@ function LoginFormInner({
                 <Button type="submit" disabled={isLoading}>
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
-                
+
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
-                  <Field>
+              <Field>
                 <Button
                   variant="outline"
                   type="button"
@@ -162,7 +162,7 @@ function LoginFormInner({
                 </FieldDescription>
               </Field>
 
-            
+
             </FieldGroup>
           </form>
         </CardContent>
