@@ -26,7 +26,7 @@ const serialize = (data: any) => {
     return serialized;
 }
 
-export async function getProducts() {
+export async function getProducts(limit?: number) {
     const products = await prisma.obat.findMany({
         include: {
             jenis_obat: true,
@@ -34,6 +34,7 @@ export async function getProducts() {
         orderBy: {
             created_at: "desc",
         },
+        ...(limit ? { take: limit } : {}),
     })
     return serialize(products)
 }

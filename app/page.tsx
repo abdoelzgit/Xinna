@@ -43,7 +43,7 @@ export default function Home() {
   const scale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1]);
 
   useEffect(() => {
-    getProducts().then(data => {
+    getProducts(4).then(data => {
       setMedicines(data);
     });
   }, []);
@@ -56,7 +56,7 @@ export default function Home() {
     }
   };
 
-  const displayedMedicines = medicines.slice(0, 8);
+  const displayedMedicines = medicines;
 
   return (
     <div className="min-h-screen bg-white text-slate-900 selection:bg-primary selection:text-white">
@@ -184,7 +184,7 @@ export default function Home() {
       <motion.main
         ref={sectionRef}
         style={{ opacity, y, scale }}
-        className="container px-4 md:px-8 py-32 mx-auto shadow-2xl shadow-primary/5 rounded-[3rem] bg-white border border-slate-100 relative z-20"
+        className="container px-4 md:px-8 py-8 mx-auto shadow-2xl shadow-primary/5 rounded-[3rem] bg-white border border-slate-100 relative z-20"
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
           <div className="space-y-2">

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 import { useChat } from "@/components/chat-context"
 import Link from "next/link"
 import Image from "next/image"
+import { TypingAnimation } from "@/components/ui/typing-animation"
 
 interface Message {
     role: "user" | "model"
@@ -157,14 +158,56 @@ export function AiChatWidget() {
                                     )}>
                                         {msg.role === "model" ? (
                                             msg.content.split(/\[PRODUCT:(.*?)\]/).map((part, index) => {
+                                                const allParts = msg.content.split(/\[PRODUCT:(.*?)\]/)
+                                                let cumulativeDelay = 0
+                                                for (let j = 0; j < index; j++) {
+                                                    if (j % 2 === 0) {
+                                                        cumulativeDelay += allParts[j].length * 10
+                                                    } else {
+                                                        cumulativeDelay += 400
+                                                    }
+                                                }
+
                                                 if (index % 2 === 1) {
                                                     try {
                                                         const product = JSON.parse(part)
+                                                        const isLatest = i === messages.length - 1 && msg.role === "model"
+
+                                                        if (isLatest) {
+                                                            return (
+                                                                <motion.div
+                                                                    key={index}
+                                                                    initial={{ opacity: 0, y: 10 }}
+                                                                    animate={{ opacity: 1, y: 0 }}
+                                                                    transition={{ delay: cumulativeDelay / 1000 }}
+                                                                >
+                                                                    <ChatProductCard product={product} animated={true} />
+                                                                </motion.div>
+                                                            )
+                                                        }
                                                         return <ChatProductCard key={index} product={product} />
                                                     } catch (e) {
                                                         return null
                                                     }
                                                 }
+
+                                                const isLatestModelMessage = i === messages.length - 1 && msg.role === "model"
+
+                                                if (isLatestModelMessage) {
+                                                    return (
+                                                        <TypingAnimation
+                                                            key={index}
+                                                            className="leading-relaxed tracking-normal inline text-sm"
+                                                            duration={10}
+                                                            delay={cumulativeDelay}
+                                                            showCursor={false}
+                                                            startOnView={false}
+                                                        >
+                                                            {part}
+                                                        </TypingAnimation>
+                                                    )
+                                                }
+
                                                 return <span key={index}>{part}</span>
                                             })
                                         ) : (
@@ -223,19 +266,24 @@ export function AiChatWidget() {
     )
 }
 
-function ChatProductCard({ product }: { product: any }) {
+function ChatProductCard({ product, animated = false }: { product: any, animated?: boolean }) {
     return (
         <div className="mt-3 bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow max-w-[280px]">
             <Link href={`/medicine/${product.id}`} className="block group/card">
                 {product.image ? (
-                    <div className="relative aspect-video w-full overflow-hidden">
+                    <motion.div
+                        className="relative aspect-video w-full overflow-hidden"
+                        initial={animated ? { opacity: 0, height: 0 } : {}}
+                        animate={animated ? { opacity: 1, height: "auto" } : {}}
+                        transition={animated ? { delay: 0.5, duration: 0.4 } : {}}
+                    >
                         <Image
                             src={product.image}
                             alt={product.name}
                             fill
                             className="object-cover transition-transform duration-500 group-hover/card:scale-105"
                         />
-                    </div>
+                    </motion.div>
                 ) : (
                     <div className="aspect-video w-full bg-slate-100 flex items-center justify-center">
                         <IconPill className="size-8 text-slate-300" />

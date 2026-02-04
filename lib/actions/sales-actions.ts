@@ -26,7 +26,7 @@ export async function getSalesHistory() {
                 }
             },
             orderBy: {
-                created_at: "desc"
+                created_at: "asc"
             }
         })
         return serialize(sales)
