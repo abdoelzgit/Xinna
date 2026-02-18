@@ -62,7 +62,7 @@ export const authOptions = {
         })
     ],
     callbacks: {
-        async signIn({ user, account, profile }) {
+        async signIn({ user, account, profile }: { user: any, account: any, profile?: any }) {
             if (account?.provider === "google") {
                 const email = user.email;
                 if (!email) return false;
@@ -92,7 +92,7 @@ export const authOptions = {
             }
             return true;
         },
-        async jwt({ token, user, account }) {
+        async jwt({ token, user, account }: { token: any, user?: any, account?: any }) {
             if (user) {
                 // Determine userType and jabatan for Google login
                 if (account?.provider === "google") {
@@ -118,7 +118,7 @@ export const authOptions = {
             }
             return token;
         },
-        async session({ session, token }) {
+        async session({ session, token }: { session: any, token: any }) {
             if (token) {
                 (session.user as any).id = token.id;
                 (session.user as any).jabatan = token.jabatan;
@@ -131,7 +131,7 @@ export const authOptions = {
         signIn: "/login",
     },
     session: {
-        strategy: "jwt",
+        strategy: "jwt" as const,
     },
     secret: process.env.NEXTAUTH_SECRET,
 };

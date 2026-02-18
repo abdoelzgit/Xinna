@@ -1,3 +1,4 @@
+import * as React from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { DashboardDock } from "@/components/dashboard/dashboard-dock"
@@ -29,8 +30,10 @@ export default function DashboardLayout({
                     {children}
                 </div>
             </SidebarInset>
-            <UnauthorizedDialog />
+            <React.Suspense fallback={null}>
+                <UnauthorizedDialog />
+            </React.Suspense>
             <DashboardDock />
-        </SidebarProvider>
+        </SidebarProvider >
     )
 }

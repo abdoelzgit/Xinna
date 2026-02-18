@@ -1,9 +1,10 @@
 "use server"
 
 import prisma from "@/lib/prisma"
+// @ts-expect-error - date-fns v4 has module resolution issues with "bundler"
 import { startOfMonth, subMonths, format } from "date-fns"
 
-const serialize = (data: any) => {
+const serialize = (data: any): any => {
     return JSON.parse(
         JSON.stringify(data, (key, value) =>
             typeof value === "bigint" ? value.toString() : value

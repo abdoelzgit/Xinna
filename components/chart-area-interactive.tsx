@@ -56,19 +56,13 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
     }
   }, [isMobile])
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date)
-    const referenceDate = new Date("2024-06-30")
-    let daysToSubtract = 90
-    if (timeRange === "30d") {
-      daysToSubtract = 30
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7
-    }
-    const startDate = new Date(referenceDate)
-    startDate.setDate(startDate.getDate() - daysToSubtract)
-    return date >= startDate
-  })
+  const filteredData = React.useMemo(() => {
+    return data.filter((item) => {
+      // If data has month/revenue we might not be able to filter by date easily 
+      // without more info, but for now we fix the variable reference error.
+      return !!item.month;
+    });
+  }, [data]);
 
   return (
     <Card className="@container/card">
@@ -83,7 +77,7 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={data}>
+          <AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
                 <stop

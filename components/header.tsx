@@ -37,7 +37,7 @@ export function Header() {
 
     React.useEffect(() => {
         const fetchCartCount = async () => {
-            if (session?.user?.userType === "customer") {
+            if ((session?.user as any)?.userType === "customer") {
                 const count = await getCartCount()
                 setCartCount(count)
             } else {
@@ -111,7 +111,7 @@ export function Header() {
                                                     <span className="font-medium text-slate-700">Profil Saya</span>
                                                 </Link>
                                             </DropdownMenuItem>
-                                            {session.user?.userType === "staff" && (
+                                            {(session.user as any)?.userType === "staff" && (
                                                 <DropdownMenuItem asChild>
                                                     <Link href="/dashboard" className="flex items-center gap-2 cursor-pointer rounded-lg px-2 py-2 hover:bg-slate-50 transition-colors">
                                                         <IconLayoutDashboard className="size-4 text-primary" />
@@ -120,7 +120,7 @@ export function Header() {
                                                 </DropdownMenuItem>
                                             )}
                                             <DropdownMenuItem asChild>
-                                                <Link href={session.user?.userType === "staff" ? "/dashboard/users" : "/profile/settings"} className="flex items-center gap-2 cursor-pointer rounded-lg px-2 py-2 hover:bg-slate-50 transition-colors">
+                                                <Link href={(session.user as any)?.userType === "staff" ? "/dashboard/users" : "/profile/settings"} className="flex items-center gap-2 cursor-pointer rounded-lg px-2 py-2 hover:bg-slate-50 transition-colors">
                                                     <IconSettings className="size-4 text-primary" />
                                                     <span className="font-medium text-slate-700">Settings</span>
                                                 </Link>

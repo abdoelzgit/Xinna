@@ -9,7 +9,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { encodeId, decodeIdAsBigInt } from "@/lib/hashids"
 
 // Helper to handle BigInt serialization and add hashedId
-const serialize = (data: any) => {
+const serialize = (data: any): any => {
     if (!data) return null;
 
     if (Array.isArray(data)) {

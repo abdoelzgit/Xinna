@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
-const serialize = (data: any) => {
+const serialize = (data: any): any => {
     return JSON.parse(
         JSON.stringify(data, (key, value) =>
             typeof value === "bigint" ? value.toString() : value
